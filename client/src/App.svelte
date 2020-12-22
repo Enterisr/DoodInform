@@ -2,7 +2,7 @@
 		import { fade } from 'svelte/transition';
 		import {Utils} from 'Utils.js'
 	let isPressed = false;
-	let time = 0; 
+	let duration = 0; 
 	function PressedON(){
 		//alert(this);
 		isPressed = true;
@@ -10,16 +10,16 @@
 	async function OnSubmit(){
 		let uri = Utils.ResolveServerPath()+"submitTurnon";
 		let res  = await fetch(uri,{
-				method: 'POST', // *GET, POST, PUT, DELETE, etc.
-				mode: 'cors', // no-cors, *cors, same-origin
-				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: 'same-origin', // include, *same-origin, omit
-				body: JSON.stringify({time}),
+				method: 'POST', 
+				mode: 'cors',
+				credentials: 'include', // include, *same-origin, omit
+				body: JSON.stringify({duration}),
 				headers: {
 				'Content-Type': 'application/json'
 				// 'Content-Type': 'application/x-www-form-urlencoded',
 				}});
-		let resCom =res.text();
+		let resCom = await res.text();
+		
 	}
 
 </script>
@@ -31,8 +31,8 @@
 		{#if isPressed}
 		<form>
 		<label class="simpleLabel timeSelector-label">
-			for <time>{time}</time> minutes
-		<input bind:value={time} class="timeSelctor-range" transition:fade type="range" min="10" max="120"/>
+			for <time>{duration}</time> minutes
+		<input bind:value={duration} class="timeSelctor-range" transition:fade type="range" min="10" max="120"/>
 		<button on:click={OnSubmit} class="submitReport-button" type="submit">ok</button>
 	</label>
 	</form>
