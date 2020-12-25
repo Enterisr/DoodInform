@@ -1,27 +1,40 @@
 <script>
 		import { fade } from 'svelte/transition';
-		import {Utils} from 'Utils.js'
+		import Utils from './Utils.js'
 	let isPressed = false;
 	let duration = 0; 
+	let lastTurnOn = "00:00";
+	async function FetchLastTurnon(){
+		
+		let uri = Utils.ResolveServerPath()+"getLastTurnOn";
+		let line  = await fetch(uri,{
+					method: 'GET', 
+					mode: 'cors',
+					//body: JSON.stringify({duration}),
+					headers: {
+					'Content-Type': 'application/json'
+					}});
+		lastTurnOn =JSON.stringify(line);
+	}
+	
+	
 	function PressedON(){
 		//alert(this);
 		isPressed = true;
 	}
-	async function OnSubmit(){
+	async function OnSubmit(e){
 		let uri = Utils.ResolveServerPath()+"submitTurnon";
 		let res  = await fetch(uri,{
 				method: 'POST', 
 				mode: 'cors',
-				credentials: 'include', // include, *same-origin, omit
 				body: JSON.stringify({duration}),
 				headers: {
 				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
 				}});
 		let resCom = await res.text();
-		
-	}
 
+	}
+	FetchLastTurnon();
 </script>
 
 <main>
@@ -29,20 +42,22 @@
 
 			<article class="button-wrap">
 		{#if isPressed}
-		<form>
+		<form >
 		<label class="simpleLabel timeSelector-label">
 			for <time>{duration}</time> minutes
-		<input bind:value={duration} class="timeSelctor-range" transition:fade type="range" min="10" max="120"/>
+		<input bind:value={duration} class="timeSelctor-range"  type="range" min="10" max="120"/>
 		<button on:click={OnSubmit} class="submitReport-button" type="submit">ok</button>
 	</label>
 	</form>
 		{:else}
-		<button class="isPressed-button" on:click={PressedON}>Turn on</button>	
-		<div transition:fade class="currentTurnon-div">
+		<div class="currentTurnon-div">
 			<span class="simpleLabel">last turn on time:</span>
-			<time>16:32</time>
+			<time>{lastTurnOn}</time>
 
 		</div>
+		<p class="explain-p">Just press the button and choose the duration that youv'e chosen</p>
+		<button class="isPressed-button" on:click={PressedON}>Turn on</button>	
+	
 		{/if}
 			</article>
 
@@ -56,18 +71,28 @@
     padding: 1em;
     margin: 0 auto;
     height: 100vh;
+	position: relative;
     width: 100vw;
-    background-color: rgb(23 23 23);
+    background: linear-gradient(black,rgb(43, 43, 43));
+	}
+	.explain-p{
+		width: 25em;
+		position: relative;
+		text-align: center;
+		margin:1em auto;
+		color:rgb(141, 141, 141);
 	}
 	article{
 		display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     position: relative;
+	height:65%;
 	}
 	.button-wrap{
-		position: relative;
 
+		margin: auto;
+		text-align: center;
 	}
 	button{
 		background-color: #41a846;
@@ -83,26 +108,29 @@
     height: 5em;
     width: 5em;
     text-align: center;
-    margin: 2em auto;
+    margin:0 auto;
 
 	}
 	button:hover{
-		box-shadow: 0px 0px 2px 2px green;
+		box-shadow: 0px 0px 2px 7px green, 0px 0px 51px 82px #67ff67 inset;
+	
 	}
 	button:active{
 		background-color: rgb(63, 253, 63);
 		box-shadow: 0px 0px 2px 5px green;
 	}
-	.currentTurnon-div{
-		color:white;
-	}
+
 	.simpleLabel{
 		color:white;
 	}
-
-	.timeSelector-label,.currentTurnon-div time{
+	.currentTurnon-div span{
 		font-size: 1.5em;
+	}
+	.timeSelector-label,.currentTurnon-div time{
+		font-size: 3em;
 		font-weight: 100;
+		color:white;
+
 		animation: neon .08s ease-in-out infinite alternate;
 
 	}
@@ -110,23 +138,34 @@
 		max-width: 16em;
 		text-align: center;
 		display: block;
-		width: 50%;
+		width: 100%;
+		cursor: pointer;
 		margin-top:1em ;
 		margin: auto;
 	}
 	.submitReport-button{
 		margin-top: 1em;
 		cursor: pointer;
-		padding: .3em .6em;
+		font-size: 1.5rem;
+		padding: .5em 1em;
 		border-radius: 4px;
+	}
+	.submitReport-button:hover{
+		margin-top: 1em;
+		cursor: pointer;
+		font-size: 1.5rem;
+		padding: .5em 1em;
+		border-radius: 4px;	
+		box-shadow: 0px 0px 2px 3px green;
+
 	}
 	h1 {
 	    color: #da260f;
     font-family: 'Langar', cursive;
 	justify-self: start;
     text-transform: uppercase;
-    font-size: 3em;
-    margin-top: 1em;
+	font-size:calc(5rem + 1vw);
+	margin-top: 1em;
     font-weight: 100;
 	}
 	@keyframes neon {
@@ -159,7 +198,7 @@
     cursor: pointer;
     height: 3em;
     width: 3em;
-    margin: 2em auto;
+    margin: 0 auto;
     color: white;
     transition: ease all .3s;
 		}
