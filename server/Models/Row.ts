@@ -8,7 +8,8 @@ export class Row {
 		this.Time = time;
 	}
 
-	toStr() {
+
+	public toStr() {
 		return JSON.stringify(this);
 	}
 }

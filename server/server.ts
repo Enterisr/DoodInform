@@ -26,8 +26,16 @@ app.get('/getLastTurnOn', async function(req: any, res: any, next: Function) {
 	try {
 		let dr = new DataReader();
 		let row = await dr.ReadLastRecord();
-		let rowStringfy =row?.toStr(); 
+		console.log(typeof row);
+		if(row){
+		let rowObj = new Row(row.Duration,"0",row.Time);
+		let rowStringfy =rowObj.toStr(); 
 		res.send(rowStringfy);
+			
+	}
+		else{
+			res.send("db not found");
+		}
 	} catch (ex) {
 		console.error(ex.toString());
 	}
