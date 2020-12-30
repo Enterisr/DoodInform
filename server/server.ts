@@ -6,7 +6,7 @@ import DataReader from './DAL/DataReader.ts';
 
 import { Row } from './Models/Row.ts';
 const app = opine();
-const CLIENT_PATH: string = '../client/public';
+const CLIENT_PATH = '../client/public';
 app.use(serveStatic(CLIENT_PATH));
 app.use(json());
 app.use(opineCors()); // Enable CORS for All Routes

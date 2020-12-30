@@ -1,6 +1,7 @@
 <script>
-		import { fade } from 'svelte/transition';
-		import Utils from './Utils.js'
+import { listen } from 'svelte/internal';
+import dayjs from 'dayjs';
+import Utils from './Utils.js'
 	let isPressed = false;
 	let duration = 0; 
 	let lastTurnOn = "00:00";
@@ -14,7 +15,17 @@
 					headers: {
 					'Content-Type': 'application/json'
 					}});
-		lastTurnOn =JSON.stringify(line);
+		let resJsoned =await line.json();
+		console.table(resJsoned);
+		let lastTurnOnDate = dayjs(resJsoned.Time);
+		let now = dayjs();
+		if(now.diff(lastTurnOnDate,"day")==0){
+			lastTurnOn = lastTurnOnDate.format("HH:mm");
+			duration = resJsoned.Duration;
+		}
+		else{
+			lastTurnOn = "not today :(";
+		}
 	}
 	
 	
@@ -31,28 +42,37 @@
 				headers: {
 				'Content-Type': 'application/json'
 				}});
-		let resCom = await res.text();
+		let resJsoned = await res.json();
 
 	}
 	FetchLastTurnon();
 </script>
 
 <main>
-	<h1>DoodDetctor</h1>
+	<h1>doodetector</h1>
 
-			<article class="button-wrap">
-		{#if isPressed}
+	<article class="button-wrap">
+	{#if isPressed}
 		<form >
 		<label class="simpleLabel timeSelector-label">
-			for <time>{duration}</time> minutes
+			for <time classname="timeSelctorDuration">{duration}</time> minutes
 		<input bind:value={duration} class="timeSelctor-range"  type="range" min="10" max="120"/>
 		<button on:click={OnSubmit} class="submitReport-button" type="submit">ok</button>
-	</label>
-	</form>
-		{:else}
+		</label>
+		</form>
+	{:else}
 		<div class="currentTurnon-div">
-			<span class="simpleLabel">last turn on time:</span>
-			<time>{lastTurnOn}</time>
+			<div>
+			<span class="simpleLabel">last turn on time:</span>	
+			<time>{lastTurnOn}</time>			
+		</div>
+			{#if duration}
+				<div>
+					<span class="simpleLabel">
+					for <time> {duration} </time> minutes </span>
+			
+				</div>
+			{/if}
 
 		</div>
 		<p class="explain-p">Just press the button and choose the duration that youv'e chosen</p>
@@ -66,6 +86,11 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Langar&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');	:root{
+		--mainColor:rgb(22, 0, 96);
+		--submitColor:white;
+		
+	}
 	main {
 	    text-align: center;
     padding: 1em;
@@ -73,14 +98,14 @@
     height: 100vh;
 	position: relative;
     width: 100vw;
-    background: linear-gradient(black,rgb(43, 43, 43));
+    background: linear-gradient(rgb(0 72 151),rgb(95 172 255 / 88%));
 	}
 	.explain-p{
 		width: 25em;
 		position: relative;
 		text-align: center;
 		margin:1em auto;
-		color:rgb(141, 141, 141);
+		color:rgb(20, 20, 20);
 	}
 	article{
 		display: flex;
@@ -95,29 +120,27 @@
 		text-align: center;
 	}
 	button{
-		background-color: #41a846;
-		color: white;
+		background-color:var(--submitColor);
+		color:var(--mainColor);
 		transition: ease all .3s;
 		border:none;
 
 	}
 	.isPressed-button{
-    font-size: 2.6em;
-    border-radius: 50%;
+    font-size: 2em;
+	border-radius: 3px;
     cursor: pointer;
-    height: 5em;
-    width: 5em;
     text-align: center;
     margin:0 auto;
 
 	}
 	button:hover{
-		box-shadow: 0px 0px 2px 7px green, 0px 0px 51px 82px #67ff67 inset;
-	
+		box-shadow: 0px 0px 3px 3px var(--submitColor);
+
 	}
 	button:active{
-		background-color: rgb(63, 253, 63);
-		box-shadow: 0px 0px 2px 5px green;
+		background-color: rgb(91, 105, 228);
+		box-shadow: 0px 0px 3px 3px var(--submitColor);
 	}
 
 	.simpleLabel{
@@ -126,14 +149,13 @@
 	.currentTurnon-div span{
 		font-size: 1.5em;
 	}
-	.timeSelector-label,.currentTurnon-div time{
+	 time{
 		font-size: 3em;
-		font-weight: 100;
-		color:white;
-
-		animation: neon .08s ease-in-out infinite alternate;
-
+		font-weight: 400;
+		border-bottom: 2px solid var(--mainColor);
+		color:var(--mainColor);
 	}
+	
 	.timeSelctor-range{
 		max-width: 16em;
 		text-align: center;
@@ -156,33 +178,29 @@
 		font-size: 1.5rem;
 		padding: .5em 1em;
 		border-radius: 4px;	
-		box-shadow: 0px 0px 2px 3px green;
+		box-shadow: 0px 0px 2px 3px var(--mainColor);
 
 	}
 	h1 {
-	    color: #da260f;
-    font-family: 'Langar', cursive;
-	justify-self: start;
-    text-transform: uppercase;
-	font-size:calc(5rem + 1vw);
-	margin-top: 1em;
-    font-weight: 100;
+		color: var(--mainColor);
+		font-family: 'Sacramento', cursive;
+		justify-self: start;
+		text-transform: uppercase;
+		font-size: calc(5rem + 1vw);
+		text-transform: lowercase;
+		margin-top: 25px;
+		font-weight: 100;
 	}
 	@keyframes neon {
   from {
     text-shadow:
-    0 0 6px rgba(202,228,225,0.92),
-    0 0 30px rgba(202,228,225,0.34),
-    0 0 12px rgba(30,132,242,0.52),
+
     0 0 21px rgba(30,132,242,0.92),
     0 0 34px rgba(30,132,242,0.78),
     0 0 54px rgba(30,132,242,0.92);
   }
   to {
     text-shadow:
-    0 0 6px rgba(202,228,225,0.98),
-    0 0 30px rgba(202,228,225,0.42),
-    0 0 12px rgba(30,132,242,0.58),
     0 0 22px rgba(30,132,242,0.84),
     0 0 38px rgba(30,132,242,0.88),
     0 0 60px rgba(30,132,242,1);
