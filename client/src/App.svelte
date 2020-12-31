@@ -1,10 +1,11 @@
 <script>
-import { listen } from 'svelte/internal';
 import dayjs from 'dayjs';
+import Weather from './Weather.svelte';
 import Utils from './Utils.js'
 	let isPressed = false;
 	let duration = 0; 
 	let lastTurnOn = "00:00";
+
 	async function FetchLastTurnon(){
 		
 		let uri = Utils.ResolveServerPath()+"getLastTurnOn";
@@ -50,7 +51,8 @@ import Utils from './Utils.js'
 
 <main>
 	<h1>doodetector</h1>
-
+	<Weather/>
+	
 	<article class="button-wrap">
 	{#if isPressed}
 		<form >
@@ -211,13 +213,11 @@ import Utils from './Utils.js'
 			max-width: none;
 		}
 		.isPressed-button{
-    font-size: 2.6em;
-    border-radius: 50%;
+    font-size: 2em;
     cursor: pointer;
-    height: 3em;
-    width: 3em;
+
     margin: 0 auto;
-    color: white;
+    color: var(--mainColor);
     transition: ease all .3s;
 		}
 	}
