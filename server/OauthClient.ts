@@ -27,26 +27,22 @@ export default class OauthHandler {
 		res.redirect(this.oauth2Client.code.getAuthorizationUri());
 	}
 	async ReturnFromCallback(req: any, res: any, next: any) {
-		let body = JSON.stringify({
-			grant_type: 'authorization_code',
-			code: req.query.code
-		});
-		let headers = { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' };
-		let query = `${this.id}&client_secret=${this.secret}`;
-		let fetchRes = await fetch(`https://secure.splitwise.com/oauth/token?client_id=${query}`, {
+		let body = [
+			`code=${req.query.code}`,
+			'grant_type=authorization_code',
+			`client_id=${this.id}`,
+			`client_secret=${this.secret}`,
+			'redirect_uri=http://localhost:3000/backfromauth'
+		];
+		let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+		let fetchRes = await fetch(`https://secure.splitwise.com/oauth/token`, {
 			headers,
-			body,
+			body: body.join('&'),
 			mode: 'cors',
 			method: 'POST'
 		});
 		let ress = await fetchRes.json();
+
 		res.send(ress);
-		/* 	res.cookie({
-			name: 'token',
-			value: 'Bearer ' + tokens.accessToken,
-			expires: new Date(Date.now() + 900000), //15 minutes
-			sameSite: 'Strict'
-		});
-		res.redirect(`http://localhost:${this.port}/`);*/
 	}
 }

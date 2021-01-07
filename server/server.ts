@@ -2,12 +2,13 @@ import { json, opine, serveStatic } from 'https://deno.land/x/opine@0.21.2/mod.t
 import { opineCors } from 'https://deno.land/x/cors@v1.2.1/mod.ts';
 import DataWriter from './DAL/DataWriter.ts';
 import DataReader from './DAL/DataReader.ts';
-import 'https://deno.land/x/dotenv/load.ts';
+import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import OauthClient from './OauthClient.ts';
 import { Row } from './Models/Row.ts';
 const app = opine();
 const CLIENT_PATH = '../client/public';
 const AUTH_CLIENT = new OauthClient();
+const CONFIG = config();
 app.use(serveStatic(CLIENT_PATH));
 app.use(json());
 app.use(opineCors()); // Enable CORS for All Routes
@@ -66,5 +67,6 @@ app.get('/', function(req: any, res: any) {
 	res.sendFile(`${CLIENT_PATH}/index.html`);
 });
 
-let port = parseInt(Deno.env.get('PORT') || '');
+let port = parseInt(CONFIG.PORT);
+console.log(CONFIG.PORT);
 app.listen(port);
