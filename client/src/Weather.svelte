@@ -7,17 +7,25 @@
 		let URI = Utils.ResolveServerPath()+"weatherReport";
 		let res = await fetch(URI,{
 					method: 'GET', 
-					mode: 'cors',headers: {'Content-Type': 'application/json'}});
+                    mode: 'cors',
+                    headers: {'Content-Type': 'application/json'}});
 		let weather = await res.json();
 		temprature =weather.current.temperature;
-		weatherIMG = weather.current.weather_icons;
+        weatherIMG = weather.current.weather_icons;
+        return {temprature,weatherIMG}
     }
-    GetWeather();
 
 </script>
 <section class="tempratureWrap">
-	<span class="weather-span">{temprature}°C</span>
-	<img src={weatherIMG} alt="weather"/>
+    {#await GetWeather()}
+    <span>loading weather...</span>
+    {:then {temprature,weatherIMG}} 
+        <span class="weather-span">{temprature}°C</span>
+        <img src={weatherIMG}/>
+    {:catch error}
+        <p>Can't fetch weather</p>
+    {/await}
+
 </section>    
 <style>
 .tempratureWrap{

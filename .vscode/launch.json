@@ -10,7 +10,7 @@
             "request": "launch",
             "type": "pwa-node",
             "cwd": "${workspaceFolder}",
-            "runtimeExecutable": "deno",
+            "runtimeExecutable": "denon",
             "runtimeArgs": [
                 "run",
                 "--inspect-brk",

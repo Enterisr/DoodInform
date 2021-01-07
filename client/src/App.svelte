@@ -50,7 +50,9 @@ import Utils from './Utils.js'
 </script>
 
 <main>
+	<div class="h1-animator">
 	<h1>doodetector</h1>
+	</div>
 	<Weather/>
 	
 	<article class="button-wrap">
@@ -92,6 +94,22 @@ import Utils from './Utils.js'
 		--mainColor:rgb(22, 0, 96);
 		--submitColor:white;
 		
+	}
+	@keyframes h1-animation{
+		0%{
+			width: 0;
+		}
+
+		100%{
+			width: 100%;
+		}
+	}
+	.h1-animator{
+		position: relative;
+		margin: auto;
+		animation: ease h1-animation 2s 0.2s;
+		overflow: hidden;
+		height: 10em;
 	}
 	main {
 	    text-align: center;
@@ -193,32 +211,23 @@ import Utils from './Utils.js'
 		margin-top: 25px;
 		font-weight: 100;
 	}
-	@keyframes neon {
-  from {
-    text-shadow:
 
-    0 0 21px rgba(30,132,242,0.92),
-    0 0 34px rgba(30,132,242,0.78),
-    0 0 54px rgba(30,132,242,0.92);
-  }
-  to {
-    text-shadow:
-    0 0 22px rgba(30,132,242,0.84),
-    0 0 38px rgba(30,132,242,0.88),
-    0 0 60px rgba(30,132,242,1);
-  }
-}
 	@media (max-width: 640px) {
-		main {
-			max-width: none;
+	main {
+		max-width: none;
+	}
+	.isPressed-button{
+		font-size: 2em;
+		cursor: pointer;
+		margin: 0 auto;
+		color: var(--mainColor);
+		transition: ease all .3s;
 		}
-		.isPressed-button{
-    font-size: 2em;
-    cursor: pointer;
-
-    margin: 0 auto;
-    color: var(--mainColor);
-    transition: ease all .3s;
-		}
+	input[type="range"]{
+		max-width: 180PX;
+		TRANSFORM: ROTATE(90DEG);
+		TOP: -180PX;
+		POSITION: RELATIVE;
+	}
 	}
 </style>
