@@ -12,6 +12,8 @@ const CONFIG = config();
 app.use(serveStatic(CLIENT_PATH));
 app.use(json());
 app.use(opineCors()); // Enable CORS for All Routes
+app.use('/getauthURI', AUTH_CLIENT.GetAuthURI.bind(AUTH_CLIENT));
+
 app.use('/authme', AUTH_CLIENT.Auth.bind(AUTH_CLIENT));
 app.use('/backfromauth', AUTH_CLIENT.ReturnFromCallback.bind(AUTH_CLIENT));
 
@@ -63,7 +65,8 @@ app.get('/authme', function(req: any, res: any) {
 	let authClient = new OauthClient();
 	authClient.Auth(req, res);
 });
-app.get('/', function(req: any, res: any) {
+app.get('/*', function(req: any, res: any) {
+	//SPA
 	res.sendFile(`${CLIENT_PATH}/index.html`);
 });
 

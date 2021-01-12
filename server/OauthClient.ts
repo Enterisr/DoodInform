@@ -1,6 +1,7 @@
 import { OAuth2Client } from 'https://deno.land/x/oauth2_client/mod.ts';
 import 'https://deno.land/x/dotenv/load.ts';
 import { opine } from 'https://deno.land/x/opine@0.21.2/mod.ts';
+import { to } from 'https://deno.land/x/evt@v1.8.7/lib/util/genericOperators/to.ts';
 
 export default class OauthHandler {
 	oauth2Client: any;
@@ -16,7 +17,7 @@ export default class OauthHandler {
 			clientSecret: this.secret,
 			authorizationEndpointUri: 'https://secure.splitwise.com/oauth/authorize',
 			tokenUri: 'https://secure.splitwise.com/oauth/token',
-			redirectUri: `http://localhost:${this.port}/backfromauth`,
+			redirectUri: `http://localhost:${this.port}/backfromauth/`,
 			defaults: {
 				scope: 'read:user'
 			}
@@ -24,15 +25,22 @@ export default class OauthHandler {
 	}
 
 	Auth(req: any, res: any) {
-		res.redirect(this.oauth2Client.code.getAuthorizationUri());
+		console.log(this.port);
+		console.log(this.oauth2Client.code.getAuthorizationUri().href);
+		res.redirect(this.oauth2Client.code.getAuthorizationUri().href);
+	}
+	GetAuthURI(req: any, res: any) {
+		console.log(this.oauth2Client.code.getAuthorizationUri().href);
+		res.send(this.oauth2Client.code.getAuthorizationUri().href);
 	}
 	async ReturnFromCallback(req: any, res: any, next: any) {
+		console.log(this.port);
 		let body = [
 			`code=${req.query.code}`,
 			'grant_type=authorization_code',
 			`client_id=${this.id}`,
 			`client_secret=${this.secret}`,
-			'redirect_uri=http://localhost:3000/backfromauth'
+			'redirect_uri=http://localhost:3000/backfromauth/'
 		];
 		let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 		let fetchRes = await fetch(`https://secure.splitwise.com/oauth/token`, {
@@ -41,8 +49,19 @@ export default class OauthHandler {
 			mode: 'cors',
 			method: 'POST'
 		});
-		let ress = await fetchRes.json();
-
-		res.send(ress);
+		let token = await fetchRes.json();
+		token = token.access_token;
+		res.cookie({
+			name: 'split_token',
+			value: token,
+			secure: false, //TODO: change in prod
+			httpOnly: false, //TODO: change in prod
+			maxAge: 86400 // cookie will be removed after 24 hours
+		});
+		const groups = await fetch('https://www.splitwise.com/api/v3.0/get_groups', {
+			headers: { Authorization: `Bearer ${token}` }
+		}).then((res) => res.json());
+		console.log(groups);
+		res.redirect('http://localhost:5000');
 	}
 }

@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import json from 'rollup-plugin-json';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -17,8 +18,8 @@ function serve() {
 	return {
 		writeBundle() {
 			if (server) return;
-			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-				stdio: ['ignore', 'inherit', 'inherit'],
+			server = require('child_process').spawn('npm', [ 'run', 'start', '--', '--dev' ], {
+				stdio: [ 'ignore', 'inherit', 'inherit' ],
 				shell: true
 			});
 
@@ -54,8 +55,9 @@ export default {
 		// https://github.com/rollup/plugins/tree/master/packages/commonjs
 		resolve({
 			browser: true,
-			dedupe: ['svelte']
+			dedupe: [ 'svelte' ]
 		}),
+
 		commonjs(),
 
 		// In dev mode, call `npm run start` once
@@ -68,7 +70,8 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		json({ compact: true })
 	],
 	watch: {
 		clearScreen: false

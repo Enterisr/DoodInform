@@ -1,5 +1,5 @@
 <script>
-    import Utils from './Utils.js'
+    import Utils from '../../Utils.js'
 
 	let temprature = 0;
 	let weatherIMG = "";

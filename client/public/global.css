@@ -1,10 +1,11 @@
-*{
+* {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -15,11 +16,12 @@ body {
 	color: #333;
 	margin: 0;
 	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue",
+		sans-serif;
 }
 
 a {
-	color: rgb(0,100,200);
+	color: rgb(0, 100, 200);
 	text-decoration: none;
 }
 
@@ -28,14 +30,17 @@ a:hover {
 }
 
 a:visited {
-	color: rgb(0,80,160);
+	color: rgb(0, 80, 160);
 }
 
 label {
 	display: block;
 }
 
-input, button, select, textarea {
+input,
+button,
+select,
+textarea {
 	font-family: inherit;
 	font-size: inherit;
 	-webkit-padding: 0.4em 0;
@@ -54,8 +59,18 @@ button {
 	color: #333;
 	background-color: #f4f4f4;
 	outline: none;
+	cursor: pointer;
 }
-
+main {
+	text-align: center;
+	padding: 1em;
+	margin: 0 auto;
+	height: 100vh;
+	position: relative;
+	z-index: 1;
+	width: 100vw;
+	background: linear-gradient(rgb(0 72 151), rgb(95 172 255 / 88%));
+}
 button:disabled {
 	color: #999;
 }
@@ -66,4 +81,22 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
+}
+#bubbles {
+	/*needs to be here casue it's precalculated real css and not the css in file on svelte...*/
+	z-index: -1;
+	will-change: auto;
+	height: 100%;
+	width: 98%;
+	overflow: hidden;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	transform: scale(1);
+}
+@media only screen and (max-width: 600px) {
+	#bubbles {
+		/*needs to be here casue it's precalculated real css and not the css in file on svelte...*/
+		display: none;
+	}
 }
