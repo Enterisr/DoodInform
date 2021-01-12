@@ -55,13 +55,9 @@ export default class OauthHandler {
 			name: 'split_token',
 			value: token,
 			secure: false, //TODO: change in prod
-			httpOnly: false, //TODO: change in prod
 			maxAge: 86400 // cookie will be removed after 24 hours
 		});
-		const groups = await fetch('https://www.splitwise.com/api/v3.0/get_groups', {
-			headers: { Authorization: `Bearer ${token}` }
-		}).then((res) => res.json());
-		console.log(groups);
+
 		res.redirect('http://localhost:5000');
 	}
 }
