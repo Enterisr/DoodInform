@@ -1,16 +1,27 @@
 <script>
- import router from 'page'
- import Home from './components/Home/Home.svelte'
- import Login from './components/Login/Login.svelte'
+ import router from 'page';
+ import Home from './components/Home/Home.svelte';
+ import Login from './components/Login/Login.svelte';
+ import GroupSelect from './components/GroupSelect/GroupSelect.svelte'
+import page from 'page';
 
  let currentPage = Login;
  let someParams = {"fun":1};
  router('/login',function(){currentPage=Login});
+ router('/GroupSelect',function(){currentPage=GroupSelect});
  router('/',function(){currentPage=Home});
-
- if(document.cookie.indexOf('split_token=')==-1){
+ let hasToken = document.cookie.indexOf('split_token=')!==-1;
+ let chosenGroup = document.cookie.indexOf('split_group=')!==-1;
+ if(hasToken&&chosenGroup){
      //not a security check, just for the benefit of the client
-    router.redirect('/login');
+     currentPage = Home;
+}
+else if(!chosenGroup&&hasToken){
+    page.redirect('/GroupSelect');
+}
+else{
+    page.redirect('/login');
+
 }
 
 

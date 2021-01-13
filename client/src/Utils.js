@@ -5,6 +5,10 @@ const Utils = {
 			return 'http://localhost:3000/';
 		}
 		return 'https://doodetector/';
+	},
+	GetCookie: function(name) {
+		let cookie = document.cookie.split('; ').find((row) => row.startsWith(name));
+		if (cookie) return cookie.split('=')[1];
 	}
 };
 export default Utils;

@@ -24,17 +24,10 @@ export default class OauthHandler {
 		});
 	}
 
-	Auth(req: any, res: any) {
-		console.log(this.port);
-		console.log(this.oauth2Client.code.getAuthorizationUri().href);
-		res.redirect(this.oauth2Client.code.getAuthorizationUri().href);
-	}
 	GetAuthURI(req: any, res: any) {
-		console.log(this.oauth2Client.code.getAuthorizationUri().href);
 		res.send(this.oauth2Client.code.getAuthorizationUri().href);
 	}
 	async ReturnFromCallback(req: any, res: any, next: any) {
-		console.log(this.port);
 		let body = [
 			`code=${req.query.code}`,
 			'grant_type=authorization_code',
@@ -51,13 +44,15 @@ export default class OauthHandler {
 		});
 		let token = await fetchRes.json();
 		token = token.access_token;
+		res.locals.token = token;
 		res.cookie({
 			name: 'split_token',
 			value: token,
+			httpOnly: false,
 			secure: false, //TODO: change in prod
-			maxAge: 86400 // cookie will be removed after 24 hours
+			maxAge: 16400
 		});
-
-		res.redirect('http://localhost:5000');
+		next();
+		//	res.redirect('http://localhost:5000');
 	}
 }
