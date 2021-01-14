@@ -1,6 +1,7 @@
 * {
 	margin: 0;
 	padding: 0;
+	transition: ease .3s all;
 	box-sizing: border-box;
 }
 

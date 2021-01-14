@@ -4,19 +4,9 @@ import DataReader from './DataReader.ts';
 
 class DataWriter extends DataAccessor {
 	//over enginereed to see how inheritance works in ts
-	constructor(fileName?: string) {
-		super(fileName);
+	constructor(collectionName: string = 'Turnon', dbName: string = 'Doodetector') {
+		super(collectionName, dbName);
 	}
-	async AppendNewLine(row: Row) {
-		//read the latest time the dood was on.
-		//this needs to be changed when deno will allow replacing strings instead of replacing all the contnet
-		let dr: DataReader = new DataReader(this.FileName);
-		let rows: any = await dr.ReadAll();
-		if (!rows) {
-			rows = [];
-		}
-		rows.push(row);
-		await Deno.writeTextFile(this.FileName, JSON.stringify(rows)); //create new one if exists
-	}
+	async AppendNewLine(row: Row) {}
 }
 export default DataWriter;

@@ -2,9 +2,9 @@ import { json, opine, serveStatic } from 'https://deno.land/x/opine@0.21.2/mod.t
 import { opineCors } from 'https://deno.land/x/cors@v1.2.1/mod.ts';
 import DataWriter from './DAL/DataWriter.ts';
 import DataReader from './DAL/DataReader.ts';
+import { Row } from './Models/Row.ts';
 import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import OauthClient from './OauthClient.ts';
-import { Row } from './Models/Row.ts';
 
 import SplitwiseAPIHandler from './DAL/SplitwiseAPIHandler.ts';
 const app = opine();
@@ -13,38 +13,13 @@ const AUTH_CLIENT = new OauthClient();
 let SplitHandler = new SplitwiseAPIHandler('');
 const CONFIG = config();
 app.use(serveStatic(CLIENT_PATH));
+//app.use(sanitize()); //TODO:sanitize all input
 app.use(json());
 app.use(opineCors()); // Enable CORS for All Routes
-app.use('/splitAPI', SplitHandler.SplitRouter);
+app.use('/Authed', SplitHandler.SplitRouter);
 app.use('/getauthURI', AUTH_CLIENT.GetAuthURI.bind(AUTH_CLIENT));
 app.use('/backfromauth', AUTH_CLIENT.ReturnFromCallback.bind(AUTH_CLIENT));
 
-app.post('/submitTurnon', async function(req, res, next: Function) {
-	try {
-		let duration: number = req.parsedBody.duration;
-		let row = new Row(duration, req.path, new Date());
-		let dw = new DataWriter();
-		dw.AppendNewLine(row);
-		res.send('ok');
-	} catch (ex) {
-		console.error(ex.toString());
-	}
-});
-app.get('/getLastTurnOn', async function(req, res, next: Function) {
-	try {
-		let dr = new DataReader();
-		let row = await dr.ReadLastRecord();
-		if (row) {
-			let rowObj = new Row(row.Duration, '0', row.Time);
-			let rowStringfy = rowObj.toStr();
-			res.send(rowStringfy);
-		} else {
-			res.send(404);
-		}
-	} catch (ex) {
-		console.error(ex.toString());
-	}
-});
 app.get('/weatherReport', async function(req, res) {
 	let userIP = req.conn.remoteAddr;
 	const geolocationRes = await fetch(
