@@ -1,4 +1,5 @@
 <script>
+import page from "page";
 import { onMount } from "svelte";
 import Utils from '../../Utils.js'
     let groups = [];
@@ -13,18 +14,8 @@ import Utils from '../../Utils.js'
                     .then((res) => res.json());
     });
     async function ChosenGroup(){
-
         let id = this.getAttribute('data-id');
-        let uri =Utils.ResolveServerPath()+"Authed/subscribeGroup";
-          groups =await fetch(uri,{
-                    method: 'POST', 
-                    mode: 'cors',
-                    body:JSON.stringify({groupId:id}),
-                    headers: {
-                    'Content-Type': 'application/json'
-                    }})
-                    .then((res) => res.json());
-        await fetch.
+        page.redirect(`/groups/${id}`);
     }
 </script>
 Please select the appartment's group

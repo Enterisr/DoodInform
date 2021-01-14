@@ -7,7 +7,7 @@ class DataReader extends DataAccessor {
 	constructor(collectionName: string = 'Turnon', dbName: string = 'Doodetector') {
 		super(collectionName, dbName);
 	}
-	async ReadLastRecordForDoc(groupId: number) {
+	async ReadLastRecordForGroup(groupId: number) {
 		//read the latest time the dood was on.
 		if (this.Collection) {
 			return await this.Collection.find({ Group: groupId }).sort({ time: -1 }).limit(1);

@@ -4,6 +4,10 @@ import DataWriter from '../DAL/DataWriter.ts';
 import DataReader from '../DAL/DataReader.ts';
 import { Row } from '../Models/Row.ts';
 
+let dr = new DataReader();
+let dw = new DataWriter();
+await dr.connect();
+await dw.connect();
 export default class SplitwiseAPIHandler {
 	protected Token: string = '';
 	protected Group: number;
@@ -26,12 +30,11 @@ export default class SplitwiseAPIHandler {
 
 		this.SplitRouter.get('/groups/get', async (req: any, res: any) => {
 			let groups = await this.getGroups();
-			console.log(groups);
 			res.send(groups.groups);
 		});
 		this.SplitRouter.use('/groups/:ID', (req: any, res: any, next: Function) => {
 			//validate
-			let group = req.query.groupId;
+			const group = req.params.ID;
 			if (this.ValidateGroup(group)) {
 				this.setGroup(group);
 				next();
@@ -47,15 +50,14 @@ export default class SplitwiseAPIHandler {
 	setGroup(groupId: number) {
 		this.Group = groupId;
 	}
-	async ValidateGroup(groupId: string) {
+	async ValidateGroup(groupId: number) {
 		let groups = await this.getGroups();
 		let selectedGroupIDX = groups.findIndex((group: any) => group.id === groupId);
 		return selectedGroupIDX !== -1;
 	}
 	async getLastTurnOn(req: any, res: any) {
 		try {
-			let dr = new DataReader();
-			let row = await dr.ReadLastRecord();
+			let row = await dr.ReadLastRecordForGroup(this.Group);
 			if (row) {
 				let rowObj = new Row(this.Group, row.Duration, '0', row.Time);
 				let rowStringfy = rowObj.toStr();
@@ -71,8 +73,7 @@ export default class SplitwiseAPIHandler {
 		try {
 			let duration: number = req.parsedBody.duration;
 			let row = new Row(this.Group, duration, req.path, new Date());
-			let dw = new DataWriter();
-			dw.AppendNewLine(row);
+			dw.AppendNewRow(row);
 			res.send('ok');
 		} catch (ex) {
 			console.error(ex.toString());

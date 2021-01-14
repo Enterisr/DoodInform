@@ -17,7 +17,9 @@ class DataAccessor {
 
 	async connect() {
 		const client = new MongoClient();
+		console.log(CONFIG.MONGO_URI);
 		await client.connect(CONFIG.MONGO_URI);
+		console.log('sdddddd');
 		const db = client.database(this.DBName);
 		this.Collection = db.collection<IRow>(this.CollectionName);
 	}

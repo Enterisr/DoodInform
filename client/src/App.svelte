@@ -7,20 +7,17 @@ import page from 'page';
 
  let currentPage = Login;
  let someParams = {"fun":1};
- router('/login',function(){currentPage=Login});
- router('/GroupSelect',function(){currentPage=GroupSelect});
- router('/',function(){currentPage=Home});
+ page('/GroupSelect',function(){currentPage=GroupSelect});
+ page('/groups/:ID',function(){currentPage=Home});
+ page('*',function(){currentPage=Login});
  let hasToken = document.cookie.indexOf('split_token=')!==-1;
- let chosenGroup = document.cookie.indexOf('split_group=')!==-1;
- if(hasToken&&chosenGroup){
-     //not a security check, just for the benefit of the client
-     currentPage = Home;
-}
-else if(!chosenGroup&&hasToken){
-    page.redirect('/GroupSelect');
-}
-else{
+ let isInGroupPage = /\/groups\/[0-9]+$/.test(document.location.pathname);
+ //only for display porpuse, the app checks token of every request with the api.
+if(!hasToken){
     page.redirect('/login');
+}
+else if(hasToken&&!isInGroupPage){
+    page.redirect('/GroupSelect');
 
 }
 

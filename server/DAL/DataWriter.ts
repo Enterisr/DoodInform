@@ -7,6 +7,9 @@ class DataWriter extends DataAccessor {
 	constructor(collectionName: string = 'Turnon', dbName: string = 'Doodetector') {
 		super(collectionName, dbName);
 	}
-	async AppendNewLine(row: Row) {}
+	async AppendNewRow(row: Row) {
+		this.Collection.insertOne(row);
+		return row;
+	}
 }
 export default DataWriter;

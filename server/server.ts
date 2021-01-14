@@ -5,7 +5,6 @@ import DataReader from './DAL/DataReader.ts';
 import { Row } from './Models/Row.ts';
 import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import OauthClient from './OauthClient.ts';
-
 import SplitwiseAPIHandler from './DAL/SplitwiseAPIHandler.ts';
 const app = opine();
 const CLIENT_PATH = '../client/public';

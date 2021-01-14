@@ -9,7 +9,7 @@
         let isPressed = false;
         async function FetchLastTurnon(){
             
-            let uri = Utils.ResolveServerPath()+"getLastTurnOn";
+            let uri =Utils.ResolveServerPath()+"Authed/"+window.location.pathname;
             let line  = await fetch(uri,{
                         method: 'GET', 
                         mode: 'cors',
@@ -36,7 +36,7 @@
             isPressed = true;
         }
         async function OnSubmit(e){
-            let uri = Utils.ResolveServerPath()+"submitTurnon";
+            let uri = Utils.ResolveServerPath()+"Authed/"+window.location.pathname;
             await fetch(uri,{
                     method: 'POST', 
                     mode: 'cors',
