@@ -55,11 +55,11 @@
         <article class="button-wrap">
         {#if isPressed}
             <form >
-            <label class="simpleLabel timeSelector-label">
-                for <time classname="timeSelctorDuration">{duration}</time> minutes
-            <input bind:value={duration} class="timeSelctor-range"  type="range" min="10" max="120"/>
+                <label for="timeRannge" class="simpleLabel timeSelector-label">
+                    for <time classname="timeSelctorDuration">{duration}</time> minutes </label>
+            <input bind:value={duration} name="timeRannge" class="timeSelctor-range"  type="range" min="10" max="200"/>
             <button on:click={OnSubmit} class="submitReport-button" type="submit">ok</button>
-            </label>
+           
             </form>
         {:else}
             <div class="currentTurnon-div">
@@ -76,7 +76,7 @@
                 {/if}
     
             </div>
-            <p class="explain-p">Just press the button and choose the duration that youv'e chosen</p>
+            <p class="explain-p">Just press the button and choose the duration the water will be boiling for</p>
             <button class="isPressed-button" on:click={PressedON}>Turn on</button>	
         
             {/if}
@@ -91,17 +91,21 @@
             text-align: center;
             margin:1em auto;
             color:rgb(20, 20, 20);
+            font-style: italic;
         }
         article{
             display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        position: relative;
-        height:65%;
+            flex-direction: column;
+            justify-content: space-evenly;
+            position: relative;
+            height: 65%;
+            background: #ffffff52;
+            width: 100%;
+            border-radius: 16px;
+            max-width: 28em;
         }
         .button-wrap{
-    
-            margin: auto;
+            margin: 3em auto;
             text-align: center;
         }
         button{
