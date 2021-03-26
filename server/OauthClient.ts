@@ -33,7 +33,7 @@ export default class OauthHandler {
 			'grant_type=authorization_code',
 			`client_id=${this.id}`,
 			`client_secret=${this.secret}`,
-			'redirect_uri=http://localhost:3000/backfromauth'
+			'redirect_uri=https://doodinform.herokuapp.com/backfromauth'
 		];
 		let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 		let fetchRes = await fetch(`https://secure.splitwise.com/oauth/token`, {
