@@ -49,7 +49,7 @@ export default class OauthHandler {
 			name: 'split_token',
 			value: token,
 			httpOnly: false,
-			secure: false, //TODO: change in prod
+			secure: true, //TODO: change in prod
 			maxAge: 16400
 		});
 		next();
