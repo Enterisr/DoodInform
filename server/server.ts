@@ -1,15 +1,15 @@
 import { json, opine, serveStatic } from 'https://deno.land/x/opine@0.21.2/mod.ts';
 import { opineCors } from 'https://deno.land/x/cors@v1.2.1/mod.ts';
-
+import { exists } from 'https://deno.land/std@0.91.0/fs/mod.ts';
+import { join } from 'https://deno.land/std@0.91.0/path/mod.ts';
 import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import OauthClient from './OauthClient.ts';
 import SplitwiseAPIHandler from './DAL/SplitwiseAPIHandler.ts';
 const app = opine();
-const CLIENT_PATH = '../client/public';
+const CLIENT_PATH = `../client/public`;
 const AUTH_CLIENT = new OauthClient();
 let SplitHandler = new SplitwiseAPIHandler('');
-const CONFIG = { ...config(), ...Deno.env.toObject() };
-app.use(serveStatic(CLIENT_PATH));
+const CONFIG = { ...config(), ...config({ path: '../.env' }), ...Deno.env.toObject() };
 //app.use(sanitize()); //TODO:sanitize all input
 app.use(json());
 app.use(opineCors()); // Enable CORS for All Routes
@@ -36,6 +36,13 @@ app.get('/weatherReport', async function(req, res) {
 	}
 });
 
+app.get('/*', async (req, res, next) => {
+	console.log(req);
+	const filePath = join(CLIENT_PATH, req.path);
+	const isExist = await exists(filePath);
+	if (isExist) res.sendFile(filePath);
+	else next();
+});
 app.get('/*', function(req, res) {
 	//SPA
 	res.sendFile(`${CLIENT_PATH}/index.html`);

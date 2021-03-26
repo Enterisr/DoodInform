@@ -10,13 +10,11 @@ class DataReader extends DataAccessor {
 	async ReadLastRecordForGroup(groupId: number) {
 		//read the latest time the dood was on.
 		if (this.Collection) {
-			const d: any = await this.Collection
+			return await this.Collection
 				.find({ Group: groupId }, { noCursorTimeout: false })
-				.sort({ time: -1 })
+				.sort({ Time: -1 })
 				.limit(1)
 				.toArray();
-			console.log(d);
-			return d;
 		}
 	}
 }

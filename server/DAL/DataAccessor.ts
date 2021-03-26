@@ -3,8 +3,7 @@ import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import { Row } from '../Models/Row.ts';
 import IRow from '../Models/IRow.ts';
 
-const CONFIG = { ...config(), ...Deno.env.toObject() };
-console.log(CONFIG);
+const CONFIG = { ...config(), ...config({ path: '../.env' }), ...Deno.env.toObject() };
 class DataAccessor {
 	//over enginereed to see how inheritance works in ts
 	Collection: any;

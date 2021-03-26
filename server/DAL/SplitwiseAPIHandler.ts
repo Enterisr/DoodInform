@@ -14,7 +14,6 @@ export default class SplitwiseAPIHandler {
 	public SplitRouter: any;
 
 	constructor(token: string) {
-		console.log(token);
 		this.Token = token;
 		this.Group = -1;
 		this.SplitRouter = Router();
@@ -52,7 +51,6 @@ export default class SplitwiseAPIHandler {
 	}
 	async validateGroup(groupId: number) {
 		let { groups } = await this.getGroups();
-		console.log(groups);
 		let selectedGroupIDX = groups.findIndex((group: any) => group.id == groupId);
 		return selectedGroupIDX !== -1;
 	}
@@ -62,8 +60,6 @@ export default class SplitwiseAPIHandler {
 			if (row) {
 				let rowObj = new Row(this.Group, row.Duration, '0', row.Time);
 				let rowStringfy = rowObj.toStr();
-				console.log(rowStringfy);
-
 				res.send(rowObj);
 			} else {
 				res.send(404);
