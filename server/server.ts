@@ -40,7 +40,7 @@ app.get('/*', async (req, res, next) => {
 	console.log(req);
 	const filePath = join(CLIENT_PATH, req.path);
 	const isExist = await exists(filePath);
-	console.log('------------------exists? ') + isExist;
+	console.log('------------------exists? ' + isExist);
 	if (isExist) res.sendFile(filePath);
 	else next();
 });
