@@ -41,8 +41,8 @@ app.get('/*', async (req, res, next) => {
 	const filePath = join(CLIENT_PATH, req.path);
 	const isExist = await exists(filePath);
 	console.log('------------------exists? ' + isExist);
-	if (isExist) res.sendFile(filePath);
-	else next();
+	if (isExist) return res.sendFile(filePath);
+	next();
 });
 app.get('/*', function(req, res) {
 	//SPA
