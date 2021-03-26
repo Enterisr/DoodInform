@@ -17,7 +17,7 @@ export default class OauthHandler {
 			clientSecret: this.secret,
 			authorizationEndpointUri: 'https://secure.splitwise.com/oauth/authorize',
 			tokenUri: 'https://secure.splitwise.com/oauth/token',
-			redirectUri: `http://localhost:3000/backfromauth`,
+			redirectUri: `https://doodinform.herokuapp.com/backfromauth`,
 			defaults: {
 				scope: 'read:user'
 			}
