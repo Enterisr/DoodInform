@@ -4,7 +4,7 @@ const Utils = {
 		if (isLocal) {
 			return 'http://localhost:3000/';
 		}
-		return 'https://doodetector/';
+		return 'https://doodinform.herokuapp.com/';
 	},
 	GetCookie: function(name) {
 		let cookie = document.cookie.split('; ').find((row) => row.startsWith(name));
