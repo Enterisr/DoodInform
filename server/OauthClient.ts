@@ -2,7 +2,7 @@ import { OAuth2Client } from 'https://deno.land/x/oauth2_client/mod.ts';
 import 'https://deno.land/x/dotenv/load.ts';
 import { opine } from 'https://deno.land/x/opine@0.21.2/mod.ts';
 import { to } from 'https://deno.land/x/evt@v1.8.7/lib/util/genericOperators/to.ts';
-
+import Utils from './Utils';
 export default class OauthHandler {
 	oauth2Client: any;
 	port: string;
@@ -17,7 +17,7 @@ export default class OauthHandler {
 			clientSecret: this.secret,
 			authorizationEndpointUri: 'https://secure.splitwise.com/oauth/authorize',
 			tokenUri: 'https://secure.splitwise.com/oauth/token',
-			redirectUri: `https://doodinform.herokuapp.com/backfromauth`,
+			redirectUri: Utils.getRedirectURI(),
 			defaults: {
 				scope: 'read:user'
 			}
@@ -33,7 +33,7 @@ export default class OauthHandler {
 			'grant_type=authorization_code',
 			`client_id=${this.id}`,
 			`client_secret=${this.secret}`,
-			'redirect_uri=https://doodinform.herokuapp.com/backfromauth'
+			`redirect_uri=${Utils.getRedirectURI()}`
 		];
 		let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 		let fetchRes = await fetch(`https://secure.splitwise.com/oauth/token`, {

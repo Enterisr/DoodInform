@@ -86,7 +86,7 @@
     <style>
 
         .explain-p{
-            width: 25em;
+            width: 100%;
             position: relative;
             text-align: center;
             margin:1em auto;
@@ -180,11 +180,6 @@
             color: var(--mainColor);
             transition: ease all .3s;
             }
-        input[type="range"]{
-            max-width: 180PX;
-            TRANSFORM: ROTATE(90DEG);
-            TOP: -180PX;
-            POSITION: RELATIVE;
-        }
+       
         }
     </style>
