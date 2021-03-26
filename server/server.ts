@@ -43,4 +43,4 @@ app.get('/*', function(req, res) {
 
 let port = parseInt(CONFIG.PORT);
 console.log(`alive on port ${CONFIG.PORT}`);
-app.listen(port);
+app.listen(port || 3000);
