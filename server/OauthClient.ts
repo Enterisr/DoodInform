@@ -43,13 +43,14 @@ export default class OauthHandler {
 			method: 'POST'
 		});
 		let token = await fetchRes.json();
+		console.log('token:' + token);
 		token = token.access_token;
 		res.locals.token = token;
 		res.cookie({
 			name: 'split_token',
 			value: token,
 			httpOnly: false,
-			secure: true, //TODO: change in prod
+			secure: true,
 			maxAge: 16400
 		});
 		next();
