@@ -8,7 +8,7 @@ const app = opine();
 const CLIENT_PATH = '../client/public';
 const AUTH_CLIENT = new OauthClient();
 let SplitHandler = new SplitwiseAPIHandler('');
-const CONFIG = config({ path: '../.env' });
+const CONFIG = { ...config(), ...Deno.env.toObject() };
 app.use(serveStatic(CLIENT_PATH));
 //app.use(sanitize()); //TODO:sanitize all input
 app.use(json());
