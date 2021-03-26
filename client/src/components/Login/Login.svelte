@@ -2,6 +2,7 @@
 <script>
 import Utils from '../../Utils.js';
 import Particles from 'svelte-particles';
+import ParticlesConfig from './ParticlesConfig';
 async function RequestLogin(){
     let reqURI = Utils.ResolveServerPath()+"getauthURI";
     const res =await fetch(reqURI,{
@@ -25,56 +26,7 @@ async function RequestLogin(){
 </button>
 
 </section>
-<Particles id="bubbles" options={{
-    "particles": {
-      "number": {
-        "value": 50
-      },
-      "color": {
-        "value": "#a5d3fc"
-      },
-      "shape": {
-        "type": "circle",
-        "stroke": {
-          "width": 0,
-          "color": "#000"
-        }
-      },
-      "opacity": {
-        "value": 0.9,
-        "random": true,
-        "anim": {
-          "enable": false,
-          "speed": 0.9744926547616141,
-          "opacity_min": 0.15429467033725558,
-          "sync": false
-        }
-      },
-      "size": {
-        "value": 20,
-       
-      },
-      "move": {
-        "enable": true,
-        "speed": 1,
-        "direction": "top"     
-     }
-    },
-    "interactivity": {
-      "detect_on": "canvas",
-      "events": {
-        "onhover": {
-          "enable": false,
-          "mode": "grab"
-        },
-        "onclick": {
-          "enable": false,
-          "mode": "bubble"
-        },
-        "resize": false
-      }
-    },
-  }}/>
+<Particles id="bubbles" options={ParticlesConfig}/>
 
 <style>
     

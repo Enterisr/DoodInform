@@ -32,10 +32,10 @@
         
         
         function PressedON(){
-            //alert(this);
             isPressed = true;
         }
         async function OnSubmit(e){
+            e.preventDefault();
             let uri = Utils.ResolveServerPath()+"Authed/"+window.location.pathname;
             await fetch(uri,{
                     method: 'POST', 

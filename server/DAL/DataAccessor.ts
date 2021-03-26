@@ -1,4 +1,4 @@
-import { MongoClient } from 'https://deno.land/x/mongo@v0.21.0/mod.ts';
+import { MongoClient } from 'https://deno.land/x/mongo@v0.21.2/mod.ts';
 import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import { Row } from '../Models/Row.ts';
 import IRow from '../Models/IRow.ts';
@@ -17,9 +17,22 @@ class DataAccessor {
 
 	async connect() {
 		const client = new MongoClient();
-		console.log(CONFIG.MONGO_URI);
-		await client.connect(CONFIG.MONGO_URI);
-		console.log('sdddddd');
+		await client.connect({
+			db: 'admatay',
+			tls: true,
+			servers: [
+				{
+					host: 'cluster0-shard-00-01.wypab.mongodb.net',
+					port: 27017
+				}
+			],
+			credential: {
+				username: 'atlas_admin',
+				password: CONFIG.MONGO_PASS,
+				db: 'admatay',
+				mechanism: 'SCRAM-SHA-1'
+			}
+		});
 		const db = client.database(this.DBName);
 		this.Collection = db.collection<IRow>(this.CollectionName);
 	}

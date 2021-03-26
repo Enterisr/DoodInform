@@ -4,19 +4,20 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
      
         {
             "name": "Launch Deno",
             "request": "launch",
             "type": "pwa-node",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/server/",
             "runtimeExecutable": "denon",
             "runtimeArgs": [
                 "run",
                 "--inspect-brk",
                 "-A",
                 "--unstable",
-                "./server/server.ts"
+                "server.ts"
             ],
             "attachSimplePort": 9229
         }

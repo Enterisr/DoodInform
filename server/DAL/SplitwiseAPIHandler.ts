@@ -1,4 +1,4 @@
-import { Router } from 'https://deno.land/x/opine@1.0.2/mod.ts';
+import { Router } from 'https://deno.land/x/opine@1.2.0/mod.ts';
 import { getCookies } from 'https://deno.land/std@0.83.0/http/cookie.ts';
 import DataWriter from '../DAL/DataWriter.ts';
 import DataReader from '../DAL/DataReader.ts';
@@ -24,49 +24,52 @@ export default class SplitwiseAPIHandler {
 		this.SplitRouter.use('*', (req: any, res: any, next: Function) => {
 			let token = getCookies(req).split_token;
 			this.setToken(token);
-
 			next();
 		});
 
 		this.SplitRouter.get('/groups/get', async (req: any, res: any) => {
-			let groups = await this.getGroups();
-			res.send(groups.groups);
+			let { groups } = await this.getGroups();
+			res.send(groups);
 		});
-		this.SplitRouter.use('/groups/:ID', (req: any, res: any, next: Function) => {
+		this.SplitRouter.use('/groups/:ID', async (req: any, res: any, next: Function) => {
 			//validate
 			const group = req.params.ID;
-			if (this.ValidateGroup(group)) {
+			const isMember: Boolean = await this.validateGroup(group);
+			if (isMember) {
 				this.setGroup(group);
 				next();
-			}
-			res.status(403).send("You don't have access to this group :(");
+			} else res.setStatus(403).send("You don't have access to this group :(");
 		});
-		this.SplitRouter.get('/groups/:ID', this.getLastTurnOn);
-		this.SplitRouter.post('/groups/:ID', this.PostLastTurnOn);
+		this.SplitRouter.get('/groups/:ID', this.getLastTurnOn.bind(this));
+		this.SplitRouter.post('/groups/:ID', this.PostLastTurnOn.bind(this));
 	}
+
 	setToken(token: string) {
 		this.Token = token;
 	}
-	setGroup(groupId: number) {
-		this.Group = groupId;
+	setGroup(groupId: string) {
+		this.Group = parseInt(groupId);
 	}
-	async ValidateGroup(groupId: number) {
-		let groups = await this.getGroups();
-		let selectedGroupIDX = groups.findIndex((group: any) => group.id === groupId);
+	async validateGroup(groupId: number) {
+		let { groups } = await this.getGroups();
+		console.log(groups);
+		let selectedGroupIDX = groups.findIndex((group: any) => group.id == groupId);
 		return selectedGroupIDX !== -1;
 	}
 	async getLastTurnOn(req: any, res: any) {
 		try {
-			let row = await dr.ReadLastRecordForGroup(this.Group);
+			let [ row ] = await dr.ReadLastRecordForGroup(this.Group);
 			if (row) {
 				let rowObj = new Row(this.Group, row.Duration, '0', row.Time);
 				let rowStringfy = rowObj.toStr();
-				res.send(rowStringfy);
+				console.log(rowStringfy);
+
+				res.send(rowObj);
 			} else {
 				res.send(404);
 			}
 		} catch (ex) {
-			console.error(ex.toString());
+			console.error('getLastTurnOn:' + ex.toString());
 		}
 	}
 	async PostLastTurnOn(req: any, res: any, next: Function) {

@@ -1,8 +1,6 @@
 import { json, opine, serveStatic } from 'https://deno.land/x/opine@0.21.2/mod.ts';
 import { opineCors } from 'https://deno.land/x/cors@v1.2.1/mod.ts';
-import DataWriter from './DAL/DataWriter.ts';
-import DataReader from './DAL/DataReader.ts';
-import { Row } from './Models/Row.ts';
+
 import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import OauthClient from './OauthClient.ts';
 import SplitwiseAPIHandler from './DAL/SplitwiseAPIHandler.ts';
