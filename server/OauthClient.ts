@@ -17,7 +17,7 @@ export default class OauthHandler {
 			clientSecret: this.secret,
 			authorizationEndpointUri: 'https://secure.splitwise.com/oauth/authorize',
 			tokenUri: 'https://secure.splitwise.com/oauth/token',
-			redirectUri: `http://localhost:${this.port}/backfromauth/`,
+			redirectUri: `http://localhost:3000/backfromauth`,
 			defaults: {
 				scope: 'read:user'
 			}
@@ -33,7 +33,7 @@ export default class OauthHandler {
 			'grant_type=authorization_code',
 			`client_id=${this.id}`,
 			`client_secret=${this.secret}`,
-			'redirect_uri=http://localhost:3000/backfromauth/'
+			'redirect_uri=http://localhost:3000/backfromauth'
 		];
 		let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 		let fetchRes = await fetch(`https://secure.splitwise.com/oauth/token`, {
@@ -51,7 +51,7 @@ export default class OauthHandler {
 			name: 'split_token',
 			value: token,
 			httpOnly: false,
-			secure: true,
+			secure: false,
 			maxAge: 16400
 		});
 		next();
