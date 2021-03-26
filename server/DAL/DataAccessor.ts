@@ -3,7 +3,7 @@ import { config } from 'https://deno.land/x/dotenv/mod.ts';
 import { Row } from '../Models/Row.ts';
 import IRow from '../Models/IRow.ts';
 
-const CONFIG = config({ path: '../.env' });
+const CONFIG = { ...config(), ...config({ path: '../.env' }) };
 
 class DataAccessor {
 	//over enginereed to see how inheritance works in ts
