@@ -2,7 +2,7 @@ import { OAuth2Client } from 'https://deno.land/x/oauth2_client/mod.ts';
 import 'https://deno.land/x/dotenv/load.ts';
 import { opine } from 'https://deno.land/x/opine@0.21.2/mod.ts';
 import { to } from 'https://deno.land/x/evt@v1.8.7/lib/util/genericOperators/to.ts';
-import Utils from './Utils';
+import Utils from './Utils.ts';
 export default class OauthHandler {
 	oauth2Client: any;
 	port: string;
