@@ -43,6 +43,8 @@ export default class OauthHandler {
 			method: 'POST'
 		});
 		let token = await fetchRes.json();
+		console.log(token);
+
 		token = token.access_token;
 		console.log('token:' + token);
 
