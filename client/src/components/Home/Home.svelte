@@ -2,11 +2,22 @@
     import dayjs from 'dayjs';
     import Weather from './Weather.svelte';
     import Utils from '../../Utils.js';
-    
+    import { toast } from '@zerodevx/svelte-toast'
+
 
         let duration = 0; 
         let lastTurnOn = "00:00";
-        let isPressed = false;
+        $:inEditing = false;
+
+        function calcDate(lastTurn){
+
+            let lastTurnOnDate = dayjs(lastTurn);
+            let now = dayjs();
+            if(now.diff(lastTurnOnDate,"day")==0){
+                return lastTurnOnDate.format("HH:mm");
+            }
+                return "not today :(";
+        }
         async function FetchLastTurnon(){
             
             let uri =Utils.ResolveServerPath()+"Authed/"+window.location.pathname;
@@ -18,32 +29,31 @@
                         'Content-Type': 'application/json'
                         }});
             let resJsoned =await line.json();
-            console.table(resJsoned);
-            let lastTurnOnDate = dayjs(resJsoned.Time);
-            let now = dayjs();
-            if(now.diff(lastTurnOnDate,"day")==0){
-                lastTurnOn = lastTurnOnDate.format("HH:mm");
-                duration = resJsoned.Duration;
-            }
-            else{
-                lastTurnOn = "not today :(";
-            }
+            lastTurnOn = calcDate(resJsoned.Time);
+            duration = resJsoned.Duration;
+        
         }
         
         
         function PressedON(){
-            isPressed = true;
+            inEditing = true;
         }
         async function OnSubmit(e){
             e.preventDefault();
             let uri = Utils.ResolveServerPath()+"Authed/"+window.location.pathname;
-            await fetch(uri,{
+            const ans = await fetch(uri,{
                     method: 'POST', 
                     mode: 'cors',
                     body: JSON.stringify({duration}),
                     headers: {
                     'Content-Type': 'application/json'
                     }});
+            ans = await ans.text();
+            if(ans==="ok"){ 
+                isEditing = false;
+                lastTurnOn = dayjs();
+            }
+            else toast.push('the submission failed :(')
     
         }
         FetchLastTurnon();
@@ -53,7 +63,7 @@
         <Weather/>
         
         <article class="button-wrap">
-        {#if isPressed}
+        {#if inEditing}
             <form >
                 <label for="timeRannge" class="simpleLabel timeSelector-label">
                     for <time classname="timeSelctorDuration">{duration}</time> minutes </label>

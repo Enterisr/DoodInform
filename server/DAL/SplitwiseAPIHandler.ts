@@ -59,7 +59,6 @@ export default class SplitwiseAPIHandler {
 			let [ row ] = await dr.ReadLastRecordForGroup(this.Group);
 			if (row) {
 				let rowObj = new Row(this.Group, row.Duration, '0', row.Time);
-				let rowStringfy = rowObj.toStr();
 				res.send(rowObj);
 			} else {
 				res.send(404);

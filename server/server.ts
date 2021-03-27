@@ -37,9 +37,9 @@ app.get('/weatherReport', async function(req, res) {
 });
 
 app.get('/*', async (req, res, next) => {
+	//serve static!
 	const filePath = join(CLIENT_PATH, req.path);
 	const isExist = await exists(filePath);
-	console.log('------------------exists? ' + isExist);
 	if (isExist) return res.sendFile(filePath);
 	next();
 });

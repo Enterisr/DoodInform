@@ -4,6 +4,7 @@
  import Login from './components/Login/Login.svelte';
  import GroupSelect from './components/GroupSelect/GroupSelect.svelte'
 import page from 'page';
+import { SvelteToast } from '@zerodevx/svelte-toast'
 
  let currentPage = Login;
  let someParams = {"fun":1};
