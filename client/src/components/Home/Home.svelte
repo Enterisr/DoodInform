@@ -7,7 +7,7 @@
 
         let duration = 0; 
         let lastTurnOn = "00:00";
-        $:inEditing = false;
+        let inEditing = false;
 
         function calcDate(lastTurn){
 
