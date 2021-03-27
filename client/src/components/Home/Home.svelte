@@ -50,7 +50,7 @@
                     }});
             const ansT = await ans.text();
             if(ansT==="ok"){ 
-                isEditing = false;
+                inEditing = false;
                 lastTurnOn = dayjs();
             }
             else toast.push('the submission failed :(')
