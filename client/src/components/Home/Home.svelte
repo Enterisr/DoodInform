@@ -48,8 +48,8 @@
                     headers: {
                     'Content-Type': 'application/json'
                     }});
-            ans = await ans.text();
-            if(ans==="ok"){ 
+            const ansT = await ans.text();
+            if(ansT==="ok"){ 
                 isEditing = false;
                 lastTurnOn = dayjs();
             }
