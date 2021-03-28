@@ -21,7 +21,7 @@ class DataAccessor {
 			tls: true,
 			servers: [
 				{
-					host: 'cluster0-shard-00-01.wypab.mongodb.net',
+					host: 'cluster0-shard-00-02.wypab.mongodb.net',
 					port: 27017
 				}
 			],
